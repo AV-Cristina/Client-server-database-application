@@ -29,7 +29,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 
 
-//_________________ Подключение клиента ____________________________________
+//_________________ РџРѕРґРєР»СЋС‡РµРЅРёРµ РєР»РёРµРЅС‚Р° ____________________________________
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
  if (ClientSocket1->Active==true){ClientSocket1->Close();}
@@ -39,38 +39,38 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 }
 
 
-//_________________ После подключения клиента ______________________________
+//_________________ РџРѕСЃР»Рµ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РєР»РёРµРЅС‚Р° ______________________________
 void __fastcall TForm1::ClientSocket1Connect(TObject *Sender,TCustomWinSocket *Socket)
 {
  ShowMessage("Connected");
- // подпись имен столбцов сетки
+ // РїРѕРґРїРёСЃСЊ РёРјРµРЅ СЃС‚РѕР»Р±С†РѕРІ СЃРµС‚РєРё
  Connect();
- // запрос всех данных у сервера
+ // Р·Р°РїСЂРѕСЃ РІСЃРµС… РґР°РЅРЅС‹С… Сѓ СЃРµСЂРІРµСЂР°
  String c = "All0";
  ClientSocket1->Socket->SendText(c);
 }
 
 
-//_________________ Получение и обработка данных от сервера ________________
+//_________________ РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… РѕС‚ СЃРµСЂРІРµСЂР° ________________
 void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
       TCustomWinSocket *Socket)
 {
- //сохранение присланной строки
+ //СЃРѕС…СЂР°РЅРµРЅРёРµ РїСЂРёСЃР»Р°РЅРЅРѕР№ СЃС‚СЂРѕРєРё
  String s = Socket->ReceiveText();
 
- //сохранение присланной команды
+ //СЃРѕС…СЂР°РЅРµРЅРёРµ РїСЂРёСЃР»Р°РЅРЅРѕР№ РєРѕРјР°РЅРґС‹
  String c = s.SubString(1,3);
  int i, j;
 
- //отправляемая строка (запрос сл.строки из указ. таблицы)
+ //РѕС‚РїСЂР°РІР»СЏРµРјР°СЏ СЃС‚СЂРѕРєР° (Р·Р°РїСЂРѕСЃ СЃР».СЃС‚СЂРѕРєРё РёР· СѓРєР°Р·. С‚Р°Р±Р»РёС†С‹)
  String r;
 
- //Если прислана строка  из 1й таблицы БД (присылаются построчно)
+ //Р•СЃР»Рё РїСЂРёСЃР»Р°РЅР° СЃС‚СЂРѕРєР°  РёР· 1Р№ С‚Р°Р±Р»РёС†С‹ Р‘Р” (РїСЂРёСЃС‹Р»Р°СЋС‚СЃСЏ РїРѕСЃС‚СЂРѕС‡РЅРѕ)
  if (c == "#A1")
     {
     s.Delete(1,3);
-    i=0;                           //столбец
-    j = StringGrid1->RowCount-1;   //строка
+    i=0;                           //СЃС‚РѕР»Р±РµС†
+    j = StringGrid1->RowCount-1;   //СЃС‚СЂРѕРєР°
     while (s.Pos(';')!=0)
         {
         StringGrid1->Cells[i][j]= s.SubString(1, s.Pos(';')-1);
@@ -82,7 +82,7 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
     ClientSocket1->Socket->SendText(r);
     }
 
- //Если прислана строка из 2й таблицы БД
+ //Р•СЃР»Рё РїСЂРёСЃР»Р°РЅР° СЃС‚СЂРѕРєР° РёР· 2Р№ С‚Р°Р±Р»РёС†С‹ Р‘Р”
  if (c == "#A2")
     {
     s.Delete(1,3);
@@ -99,7 +99,7 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
     ClientSocket1->Socket->SendText(r);
     }
 
- //Если прислана строка из 3й таблицы БД
+ //Р•СЃР»Рё РїСЂРёСЃР»Р°РЅР° СЃС‚СЂРѕРєР° РёР· 3Р№ С‚Р°Р±Р»РёС†С‹ Р‘Р”
  if (c == "#A3")
     {
     s.Delete(1,3);
@@ -116,11 +116,11 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
     ClientSocket1->Socket->SendText(r);
     }
 
-//_________________ Обновление данных после выполнения запросов ____________
- //Если прислано подтверждение сортировки записей
- //или добавления записи
- //или удаления и т д
- //сетки очищаются и перезаписываются
+//_________________ РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С… РїРѕСЃР»Рµ РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃРѕРІ ____________
+ //Р•СЃР»Рё РїСЂРёСЃР»Р°РЅРѕ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СЃРѕСЂС‚РёСЂРѕРІРєРё Р·Р°РїРёСЃРµР№
+ //РёР»Рё РґРѕР±Р°РІР»РµРЅРёСЏ Р·Р°РїРёСЃРё
+ //РёР»Рё СѓРґР°Р»РµРЅРёСЏ Рё С‚ Рґ
+ //СЃРµС‚РєРё РѕС‡РёС‰Р°СЋС‚СЃСЏ Рё РїРµСЂРµР·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ
  if (c == "upd")
     {
     for (int l=1; l<=StringGrid1->RowCount; l++)
@@ -132,51 +132,51 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
     StringGrid1->RowCount=2;
     StringGrid2->RowCount=2;
     StringGrid3->RowCount=2;
-    // запрос всех данных у сервера
+    // Р·Р°РїСЂРѕСЃ РІСЃРµС… РґР°РЅРЅС‹С… Сѓ СЃРµСЂРІРµСЂР°
     r = "All0";
     ClientSocket1->Socket->SendText(r);
     }
 
-//_________________ Получение результата поиска ____________________________
-//Если поиск не дал результатов
+//_________________ РџРѕР»СѓС‡РµРЅРёРµ СЂРµР·СѓР»СЊС‚Р°С‚Р° РїРѕРёСЃРєР° ____________________________
+//Р•СЃР»Рё РїРѕРёСЃРє РЅРµ РґР°Р» СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ
  if (c == "000")
     {
     Form4->StringGrid1->Visible=false;
-    MessageBox(NULL,"Поиск не дал результатов","Поиск", MB_OK);
+    MessageBox(NULL,"РџРѕРёСЃРє РЅРµ РґР°Р» СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ","РџРѕРёСЃРє", MB_OK);
     }
 
-//Если прислана первая строка результата поиска
+//Р•СЃР»Рё РїСЂРёСЃР»Р°РЅР° РїРµСЂРІР°СЏ СЃС‚СЂРѕРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р° РїРѕРёСЃРєР°
  if (c=="#I1" || c=="#I2" || c=="#I3")
     {
     Form4->StringGrid1->Visible=true;
-    //очистка сетки
+    //РѕС‡РёСЃС‚РєР° СЃРµС‚РєРё
     for (int l=1; l<=Form4->StringGrid1->RowCount; l++)
         {for (int k=0; k<=7; k++) {Form4->StringGrid1->Cells[k][l]="";}}
     Form4->StringGrid1->RowCount=2;
     if (c=="#I1")
        {
-       Form4->StringGrid1->Cells[0][0]="Полное имя главного файла проекта";
-       Form4->StringGrid1->Cells[1][0]="Дата начала работы над проектом";
-       Form4->StringGrid1->Cells[2][0]="Дата окончания работы над проектом";
-       Form4->StringGrid1->Cells[3][0]="Назначение";
-       Form4->StringGrid1->Cells[4][0]="Заказчик";
-       Form4->StringGrid1->Cells[5][0]="Степень завершенности";
-       Form4->StringGrid1->Cells[6][0]="Используемые модули и библиотеки";
+       Form4->StringGrid1->Cells[0][0]="РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°";
+       Form4->StringGrid1->Cells[1][0]="Р”Р°С‚Р° РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј";
+       Form4->StringGrid1->Cells[2][0]="Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј";
+       Form4->StringGrid1->Cells[3][0]="РќР°Р·РЅР°С‡РµРЅРёРµ";
+       Form4->StringGrid1->Cells[4][0]="Р—Р°РєР°Р·С‡РёРє";
+       Form4->StringGrid1->Cells[5][0]="РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё";
+       Form4->StringGrid1->Cells[6][0]="РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё";
        }
     if (c=="#I2")
        {
-       Form4->StringGrid1->Cells[0][0]="Полное имя файла модуля или библиотеки";
-       Form4->StringGrid1->Cells[1][0]="Назначение";
-       Form4->StringGrid1->Cells[2][0]="Список реализованных процедур";
-       Form4->StringGrid1->Cells[3][0]="Дата создания";
+       Form4->StringGrid1->Cells[0][0]="РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё";
+       Form4->StringGrid1->Cells[1][0]="РќР°Р·РЅР°С‡РµРЅРёРµ";
+       Form4->StringGrid1->Cells[2][0]="РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ";
+       Form4->StringGrid1->Cells[3][0]="Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ";
        }
     if (c=="#I3")
        {
-       Form4->StringGrid1->Cells[0][0]="Фамилия";
-       Form4->StringGrid1->Cells[1][0]="Имя";
-       Form4->StringGrid1->Cells[2][0]="Отчество";
-       Form4->StringGrid1->Cells[3][0]="Контактный телефон";
-       Form4->StringGrid1->Cells[4][0]="Адрес фирмы";
+       Form4->StringGrid1->Cells[0][0]="Р¤Р°РјРёР»РёСЏ";
+       Form4->StringGrid1->Cells[1][0]="РРјСЏ";
+       Form4->StringGrid1->Cells[2][0]="РћС‚С‡РµСЃС‚РІРѕ";
+       Form4->StringGrid1->Cells[3][0]="РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ";
+       Form4->StringGrid1->Cells[4][0]="РђРґСЂРµСЃ С„РёСЂРјС‹";
        }
     s.Delete(1,3);
     i=0;
@@ -193,7 +193,7 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
  }
 
 
-//Если прислана строка результата поиска
+//Р•СЃР»Рё РїСЂРёСЃР»Р°РЅР° СЃС‚СЂРѕРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р° РїРѕРёСЃРєР°
  if (c == "Inp")
     {
     s.Delete(1,3);
@@ -217,32 +217,32 @@ void __fastcall TForm1::ClientSocket1Read(TObject *Sender,
 
 void TForm1::CaptionTable1()
 {
- StringGrid1->Cells[0][0]="Полное имя главного файла проекта";
- StringGrid1->Cells[1][0]="Дата начала работы над проектом";
- StringGrid1->Cells[2][0]="Дата окончания работы над проектом";
- StringGrid1->Cells[3][0]="Назначение";
- StringGrid1->Cells[4][0]="Заказчик";
- StringGrid1->Cells[5][0]="Степень завершенности";
- StringGrid1->Cells[6][0]="Используемые модули и библиотеки";
+ StringGrid1->Cells[0][0]="РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°";
+ StringGrid1->Cells[1][0]="Р”Р°С‚Р° РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј";
+ StringGrid1->Cells[2][0]="Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј";
+ StringGrid1->Cells[3][0]="РќР°Р·РЅР°С‡РµРЅРёРµ";
+ StringGrid1->Cells[4][0]="Р—Р°РєР°Р·С‡РёРє";
+ StringGrid1->Cells[5][0]="РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё";
+ StringGrid1->Cells[6][0]="РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё";
 }
 
 
 void TForm1::CaptionTable2()
 {
- StringGrid2->Cells[0][0]="Полное имя файла модуля или библиотеки";
- StringGrid2->Cells[1][0]="Назначение";
- StringGrid2->Cells[2][0]="Список реализованных процедур";
- StringGrid2->Cells[3][0]="Дата создания";
+ StringGrid2->Cells[0][0]="РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё";
+ StringGrid2->Cells[1][0]="РќР°Р·РЅР°С‡РµРЅРёРµ";
+ StringGrid2->Cells[2][0]="РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ";
+ StringGrid2->Cells[3][0]="Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ";
 }
 
 
 void TForm1::CaptionTable3()
 {
- StringGrid3->Cells[0][0]="Фамилия";
- StringGrid3->Cells[1][0]="Имя";
- StringGrid3->Cells[2][0]="Отчество";
- StringGrid3->Cells[3][0]="Контактный телефон";
- StringGrid3->Cells[4][0]="Адрес фирмы";
+ StringGrid3->Cells[0][0]="Р¤Р°РјРёР»РёСЏ";
+ StringGrid3->Cells[1][0]="РРјСЏ";
+ StringGrid3->Cells[2][0]="РћС‚С‡РµСЃС‚РІРѕ";
+ StringGrid3->Cells[3][0]="РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ";
+ StringGrid3->Cells[4][0]="РђРґСЂРµСЃ С„РёСЂРјС‹";
 }
 
 
@@ -254,156 +254,156 @@ void TForm1::Connect()
 }
 
 
-//_________________ Сортировка _____________________________________________
+//_________________ РЎРѕСЂС‚РёСЂРѕРІРєР° _____________________________________________
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-//в зависимости от индекса открытой вкладки
-//заполняется выпадающий список полей таблицы
+//РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РёРЅРґРµРєСЃР° РѕС‚РєСЂС‹С‚РѕР№ РІРєР»Р°РґРєРё
+//Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє РїРѕР»РµР№ С‚Р°Р±Р»РёС†С‹
  Form2->ComboBox1->Clear();
  if (PageControl1->ActivePageIndex==0)
     {
-    Form2->ComboBox1->Items->Add("Полное имя главного файла проекта");
-    Form2->ComboBox1->Items->Add("Дата начала работы над проектом");
-    Form2->ComboBox1->Items->Add("Дата окончания работы над проектом");
-    Form2->ComboBox1->Items->Add("Назначение");
-    Form2->ComboBox1->Items->Add("Заказчик");
-    Form2->ComboBox1->Items->Add("Степень завершенности");
-    Form2->ComboBox1->Items->Add("Используемые модули и библиотеки");
+    Form2->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°");
+    Form2->ComboBox1->Items->Add("Р”Р°С‚Р° РЅР°С‡Р°Р»Р° СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј");
+    Form2->ComboBox1->Items->Add("Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ СЂР°Р±РѕС‚С‹ РЅР°Рґ РїСЂРѕРµРєС‚РѕРј");
+    Form2->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form2->ComboBox1->Items->Add("Р—Р°РєР°Р·С‡РёРє");
+    Form2->ComboBox1->Items->Add("РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё");
+    Form2->ComboBox1->Items->Add("РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё");
     }
  if (PageControl1->ActivePageIndex==1)
     {
-    Form2->ComboBox1->Items->Add("Полное имя файла модуля или библиотеки");
-    Form2->ComboBox1->Items->Add("Назначение");
-    Form2->ComboBox1->Items->Add("Список реализованных процедур");
-    Form2->ComboBox1->Items->Add("Дата создания");
+    Form2->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form2->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form2->ComboBox1->Items->Add("РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ");
+    Form2->ComboBox1->Items->Add("Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ");
     }
  if (PageControl1->ActivePageIndex==2)   
     {
-    Form2->ComboBox1->Items->Add("Фамилия");
-    Form2->ComboBox1->Items->Add("Имя");
-    Form2->ComboBox1->Items->Add("Отчество");
-    Form2->ComboBox1->Items->Add("Контактный телефон");
-    Form2->ComboBox1->Items->Add("Адрес фирмы");
+    Form2->ComboBox1->Items->Add("Р¤Р°РјРёР»РёСЏ");
+    Form2->ComboBox1->Items->Add("РРјСЏ");
+    Form2->ComboBox1->Items->Add("РћС‚С‡РµСЃС‚РІРѕ");
+    Form2->ComboBox1->Items->Add("РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ");
+    Form2->ComboBox1->Items->Add("РђРґСЂРµСЃ С„РёСЂРјС‹");
     }
  Form2->ShowModal();
 }
 
 
-//_________________ Фильтр _________________________________________________
+//_________________ Р¤РёР»СЊС‚СЂ _________________________________________________
 void __fastcall TForm1::N9Click(TObject *Sender)
 {
  Form5->ComboBox1->Items->Clear();
  Form5->ComboBox2->Items->Clear();
  if (PageControl1->ActivePageIndex==0)
     {
-    Form5->ComboBox1->Items->Add("Полное имя главного файла проекта");
-    Form5->ComboBox1->Items->Add("Назначение");
-    Form5->ComboBox1->Items->Add("Заказчик");
-    Form5->ComboBox1->Items->Add("Степень завершенности");
-    Form5->ComboBox1->Items->Add("Используемые модули и библиотеки");
-    Form5->ComboBox2->Items->Add("Полное имя главного файла проекта");
-    Form5->ComboBox2->Items->Add("Назначение");
-    Form5->ComboBox2->Items->Add("Заказчик");
-    Form5->ComboBox2->Items->Add("Степень завершенности");
-    Form5->ComboBox2->Items->Add("Используемые модули и библиотеки");
+    Form5->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°");
+    Form5->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form5->ComboBox1->Items->Add("Р—Р°РєР°Р·С‡РёРє");
+    Form5->ComboBox1->Items->Add("РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё");
+    Form5->ComboBox1->Items->Add("РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form5->ComboBox2->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°");
+    Form5->ComboBox2->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form5->ComboBox2->Items->Add("Р—Р°РєР°Р·С‡РёРє");
+    Form5->ComboBox2->Items->Add("РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё");
+    Form5->ComboBox2->Items->Add("РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё");
     }
  if (PageControl1->ActivePageIndex==1)
     {
-    Form5->ComboBox1->Items->Add("Полное имя файла модуля или библиотеки");
-    Form5->ComboBox1->Items->Add("Назначение");
-    Form5->ComboBox1->Items->Add("Список реализованных процедур");
-    Form5->ComboBox2->Items->Add("Полное имя файла модуля или библиотеки");
-    Form5->ComboBox2->Items->Add("Назначение");
-    Form5->ComboBox2->Items->Add("Список реализованных процедур");
+    Form5->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form5->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form5->ComboBox1->Items->Add("РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ");
+    Form5->ComboBox2->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form5->ComboBox2->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form5->ComboBox2->Items->Add("РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ");
     }
  if (PageControl1->ActivePageIndex==2)
     {
-    Form5->ComboBox1->Items->Add("Фамилия");
-    Form5->ComboBox1->Items->Add("Имя");
-    Form5->ComboBox1->Items->Add("Отчество");
-    Form5->ComboBox1->Items->Add("Контактный телефон");
-    Form5->ComboBox1->Items->Add("Адрес фирмы");
-    Form5->ComboBox2->Items->Add("Фамилия");
-    Form5->ComboBox2->Items->Add("Имя");
-    Form5->ComboBox2->Items->Add("Отчество");
-    Form5->ComboBox2->Items->Add("Контактный телефон");
-    Form5->ComboBox2->Items->Add("Адрес фирмы");
+    Form5->ComboBox1->Items->Add("Р¤Р°РјРёР»РёСЏ");
+    Form5->ComboBox1->Items->Add("РРјСЏ");
+    Form5->ComboBox1->Items->Add("РћС‚С‡РµСЃС‚РІРѕ");
+    Form5->ComboBox1->Items->Add("РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ");
+    Form5->ComboBox1->Items->Add("РђРґСЂРµСЃ С„РёСЂРјС‹");
+    Form5->ComboBox2->Items->Add("Р¤Р°РјРёР»РёСЏ");
+    Form5->ComboBox2->Items->Add("РРјСЏ");
+    Form5->ComboBox2->Items->Add("РћС‚С‡РµСЃС‚РІРѕ");
+    Form5->ComboBox2->Items->Add("РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ");
+    Form5->ComboBox2->Items->Add("РђРґСЂРµСЃ С„РёСЂРјС‹");
     }
  Form5->RadioButton1->Checked = true;
  Form5->ShowModal();
 }
 
 
-//_________________ Поиск __________________________________________________
+//_________________ РџРѕРёСЃРє __________________________________________________
 void __fastcall TForm1::N10Click(TObject *Sender)
 {
-//в зависимости от индекса открытой вкладки
-//заполняется выпадающий список полей таблицы
+//РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РёРЅРґРµРєСЃР° РѕС‚РєСЂС‹С‚РѕР№ РІРєР»Р°РґРєРё
+//Р·Р°РїРѕР»РЅСЏРµС‚СЃСЏ РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє РїРѕР»РµР№ С‚Р°Р±Р»РёС†С‹
  Form4->ComboBox1->Items->Clear();
  Form4->ComboBox2->Items->Clear();
  if (PageControl1->ActivePageIndex==0)
     {
-    Form4->ComboBox1->Items->Add("Полное имя главного файла проекта");
-    Form4->ComboBox1->Items->Add("Назначение");
-    Form4->ComboBox1->Items->Add("Заказчик");
-    Form4->ComboBox1->Items->Add("Степень завершенности");
-    Form4->ComboBox1->Items->Add("Используемые модули и библиотеки");
-    Form4->ComboBox2->Items->Add("Полное имя главного файла проекта");
-    Form4->ComboBox2->Items->Add("Назначение");
-    Form4->ComboBox2->Items->Add("Заказчик");
-    Form4->ComboBox2->Items->Add("Степень завершенности");
-    Form4->ComboBox2->Items->Add("Используемые модули и библиотеки");
+    Form4->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°");
+    Form4->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form4->ComboBox1->Items->Add("Р—Р°РєР°Р·С‡РёРє");
+    Form4->ComboBox1->Items->Add("РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё");
+    Form4->ComboBox1->Items->Add("РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form4->ComboBox2->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ РіР»Р°РІРЅРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРµРєС‚Р°");
+    Form4->ComboBox2->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form4->ComboBox2->Items->Add("Р—Р°РєР°Р·С‡РёРє");
+    Form4->ComboBox2->Items->Add("РЎС‚РµРїРµРЅСЊ Р·Р°РІРµСЂС€РµРЅРЅРѕСЃС‚Рё");
+    Form4->ComboBox2->Items->Add("РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РјРѕРґСѓР»Рё Рё Р±РёР±Р»РёРѕС‚РµРєРё");
     }
  if (PageControl1->ActivePageIndex==1)
     {
-    Form4->ComboBox1->Items->Add("Полное имя файла модуля или библиотеки");
-    Form4->ComboBox1->Items->Add("Назначение");
-    Form4->ComboBox1->Items->Add("Список реализованных процедур");
-    Form4->ComboBox2->Items->Add("Полное имя файла модуля или библиотеки");
-    Form4->ComboBox2->Items->Add("Назначение");
-    Form4->ComboBox2->Items->Add("Список реализованных процедур");
+    Form4->ComboBox1->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form4->ComboBox1->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form4->ComboBox1->Items->Add("РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ");
+    Form4->ComboBox2->Items->Add("РџРѕР»РЅРѕРµ РёРјСЏ С„Р°Р№Р»Р° РјРѕРґСѓР»СЏ РёР»Рё Р±РёР±Р»РёРѕС‚РµРєРё");
+    Form4->ComboBox2->Items->Add("РќР°Р·РЅР°С‡РµРЅРёРµ");
+    Form4->ComboBox2->Items->Add("РЎРїРёСЃРѕРє СЂРµР°Р»РёР·РѕРІР°РЅРЅС‹С… РїСЂРѕС†РµРґСѓСЂ");
     }
  if (PageControl1->ActivePageIndex==2)
     {
-    Form4->ComboBox1->Items->Add("Фамилия");
-    Form4->ComboBox1->Items->Add("Имя");
-    Form4->ComboBox1->Items->Add("Отчество");
-    Form4->ComboBox1->Items->Add("Контактный телефон");
-    Form4->ComboBox1->Items->Add("Адрес фирмы");
-    Form4->ComboBox2->Items->Add("Фамилия");
-    Form4->ComboBox2->Items->Add("Имя");
-    Form4->ComboBox2->Items->Add("Отчество");
-    Form4->ComboBox2->Items->Add("Контактный телефон");
-    Form4->ComboBox2->Items->Add("Адрес фирмы");
+    Form4->ComboBox1->Items->Add("Р¤Р°РјРёР»РёСЏ");
+    Form4->ComboBox1->Items->Add("РРјСЏ");
+    Form4->ComboBox1->Items->Add("РћС‚С‡РµСЃС‚РІРѕ");
+    Form4->ComboBox1->Items->Add("РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ");
+    Form4->ComboBox1->Items->Add("РђРґСЂРµСЃ С„РёСЂРјС‹");
+    Form4->ComboBox2->Items->Add("Р¤Р°РјРёР»РёСЏ");
+    Form4->ComboBox2->Items->Add("РРјСЏ");
+    Form4->ComboBox2->Items->Add("РћС‚С‡РµСЃС‚РІРѕ");
+    Form4->ComboBox2->Items->Add("РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ");
+    Form4->ComboBox2->Items->Add("РђРґСЂРµСЃ С„РёСЂРјС‹");
     }
  Form4->ShowModal();
 }
 
 
-//_________________ Добавление строк _______________________________________
+//_________________ Р”РѕР±Р°РІР»РµРЅРёРµ СЃС‚СЂРѕРє _______________________________________
 void __fastcall TForm1::N1Click(TObject *Sender)
 {
- //в зависимости от индекса открытой вкладки
- //открывается определенная форма
+ //РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РёРЅРґРµРєСЃР° РѕС‚РєСЂС‹С‚РѕР№ РІРєР»Р°РґРєРё
+ //РѕС‚РєСЂС‹РІР°РµС‚СЃСЏ РѕРїСЂРµРґРµР»РµРЅРЅР°СЏ С„РѕСЂРјР°
  if (PageControl1->ActivePageIndex==0) {Form3->ShowModal();}
  if (PageControl1->ActivePageIndex==1) {Form6->ShowModal();}
  if (PageControl1->ActivePageIndex==2) {Form7->ShowModal();}
 }
 
 
-//_________________ Удаление строк _________________________________________
+//_________________ РЈРґР°Р»РµРЅРёРµ СЃС‚СЂРѕРє _________________________________________
 void __fastcall TForm1::N11Click(TObject *Sender)
 {
  Form8->ShowModal();
 }
 
 
-//_________________ Редактирование строк ___________________________________
+//_________________ Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРє ___________________________________
 void __fastcall TForm1::N12Click(TObject *Sender)
 {
  if (PageControl1->ActivePageIndex==0)
     {
-    int upd_id = StringGrid1->Row; // индекс выделенной строки
+    int upd_id = StringGrid1->Row; // РёРЅРґРµРєСЃ РІС‹РґРµР»РµРЅРЅРѕР№ СЃС‚СЂРѕРєРё
     Form9->Edit1->Text =  StringGrid1->Cells[0][upd_id];
     Form9->DateTimePicker1->Date = DateToStr(StringGrid1->Cells[1][upd_id]);
     Form9->DateTimePicker2->Date = DateToStr(StringGrid1->Cells[2][upd_id]);
@@ -416,7 +416,7 @@ void __fastcall TForm1::N12Click(TObject *Sender)
 
  if (PageControl1->ActivePageIndex==1)
     {
-    int upd_id = StringGrid2->Row; // индекс выделенной строки
+    int upd_id = StringGrid2->Row; // РёРЅРґРµРєСЃ РІС‹РґРµР»РµРЅРЅРѕР№ СЃС‚СЂРѕРєРё
     Form10->Edit1->Text = StringGrid2->Cells[0][upd_id];
     Form10->Edit2->Text = StringGrid2->Cells[1][upd_id];
     Form10->Edit3->Text = StringGrid2->Cells[2][upd_id];
@@ -426,7 +426,7 @@ void __fastcall TForm1::N12Click(TObject *Sender)
 
  if (PageControl1->ActivePageIndex==2)
     {
-    int upd_id = StringGrid3->Row; // индекс выделенной строки
+    int upd_id = StringGrid3->Row; // РёРЅРґРµРєСЃ РІС‹РґРµР»РµРЅРЅРѕР№ СЃС‚СЂРѕРєРё
     Form11->Edit1->Text = StringGrid3->Cells[0][upd_id];
     Form11->Edit2->Text = StringGrid3->Cells[1][upd_id];
     Form11->Edit3->Text = StringGrid3->Cells[2][upd_id];
@@ -437,12 +437,12 @@ void __fastcall TForm1::N12Click(TObject *Sender)
 }
 
 
-//_________________ Отмена филитрации ______________________________________
+//_________________ РћС‚РјРµРЅР° С„РёР»РёС‚СЂР°С†РёРё ______________________________________
 void __fastcall TForm1::N13Click(TObject *Sender)
 {
  if (PageControl1->ActivePageIndex==0)
     {
-    // запрос на выборку всех данных у сервера
+    // Р·Р°РїСЂРѕСЃ РЅР° РІС‹Р±РѕСЂРєСѓ РІСЃРµС… РґР°РЅРЅС‹С… Сѓ СЃРµСЂРІРµСЂР°
     String r = "AlS1";
     ClientSocket1->Socket->SendText(r);
     }
@@ -459,7 +459,7 @@ void __fastcall TForm1::N13Click(TObject *Sender)
 }
 
 
-//_________________ Открытие руководства пользователя ______________________
+//_________________ РћС‚РєСЂС‹С‚РёРµ СЂСѓРєРѕРІРѕРґСЃС‚РІР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ ______________________
 void __fastcall TForm1::N3Click(TObject *Sender)
 {
  AnsiString ss =  GetCurrentDir()+"\\Doc\\ReadMe.doc";
@@ -469,7 +469,7 @@ void __fastcall TForm1::N3Click(TObject *Sender)
 }
 
 
-//_________________ Открытие отчета ________________________________________
+//_________________ РћС‚РєСЂС‹С‚РёРµ РѕС‚С‡РµС‚Р° ________________________________________
 void __fastcall TForm1::N4Click(TObject *Sender)
 {
  AnsiString ss =  GetCurrentDir()+"\\Doc\\Report.doc";
@@ -479,10 +479,10 @@ void __fastcall TForm1::N4Click(TObject *Sender)
 }
 
 
-//_________________ О программе ________________________________________
+//_________________ Рћ РїСЂРѕРіСЂР°РјРјРµ ________________________________________
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
- MessageBox(NULL,"Клиентское приложение \nВыполнила Афанасьева К. В. \n28 Октября 2010г.","О программе", MB_OK);
+ MessageBox(NULL,"РљР»РёРµРЅС‚СЃРєРѕРµ РїСЂРёР»РѕР¶РµРЅРёРµ \nР’С‹РїРѕР»РЅРёР»Р° РђС„Р°РЅР°СЃСЊРµРІР° Рљ. Р’. \n28 РћРєС‚СЏР±СЂСЏ 2010Рі.","Рћ РїСЂРѕРіСЂР°РјРјРµ", MB_OK);
 }
 
 
